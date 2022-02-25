@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {getRecord} from "../api/TODO_api";
+import {getRecord} from "./api/TODO_api";
 
 export default class RecordTodo extends Component {
     constructor(props) {

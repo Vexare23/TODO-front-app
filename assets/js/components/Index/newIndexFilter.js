@@ -1,6 +1,8 @@
 import React from "react";
 import Link from 'next/link'
-import {getTodos} from "../../api/TODO_api";
+import {deleteTodo, exportTodo, getIndexItems, getTodos} from "../../api/TODO_api";
+import $ from "jquery";
+import AddForms from "../Forms";
 
 const Loading = () => {
         return (
@@ -23,6 +25,7 @@ export default class FilterTodo extends React.Component {
             isLoaded: false,
             verifyStatus: false,
             filteredTodo: [],
+            allTodos: [],
             deleteMessage: '',
         }
         this.deleteMessageTimeoutHandle = 0;
@@ -34,31 +37,53 @@ export default class FilterTodo extends React.Component {
 
     }
     componentDidMount() {
-        getTodos()
+        getIndexItems()
             .then((data) => {
                 this.setState({
                     filteredTodo: data,
-                    isLoaded: true,
                 });
+            }).then(() => {
+            getTodos()
+                .then((data) => {
+                    this.setState({
+                        allTodos: data,
+                        isLoaded: true,
+                    });
+                });
+        })
 
-        });
     }
     componentWillUnmount() {
         clearTimeout(this.deleteMessageTimeoutHandle);
     }
     filterTodos(e, value) {
         //const searchValue = e.target.value;
-        const currentTodos = [...this.props.TODOs];
+        const currentTodos = [...this.state.allTodos];
         const matchingTodos = currentTodos.filter((TODO) => TODO.status === value)
-        //console.log(matchingTodos)
         this.setState({
             filteredTodo: matchingTodos,
         });
     }
     handleDeleteTodo(e, id) {
-        console.log('deleted')
-        console.log(id)
-        this.setDeleteMessage('Todo Deleted!');
+        this.setState((prevState) => {
+            return {
+                filteredTodo: prevState.filteredTodo.map(Todo => {
+                    if (Todo.id !== id) {
+                        return Todo;
+                    }
+                    return Object.assign({}, Todo, {isDeleting: true});
+                })
+            }
+        });
+        deleteTodo(id)
+            .then(() => {
+                this.setState((prevState) => {
+                    return {
+                        filteredTodo: prevState.filteredTodo.filter(DeletedTodo => DeletedTodo.id !== id)
+                    }
+                });
+                this.setDeleteMessage('Todo Deleted!');
+            });
     }
     setDeleteMessage(message) {
         this.setState({
@@ -81,11 +106,20 @@ export default class FilterTodo extends React.Component {
     handleExportTodo(e, id) {
         console.log('exporting')
         console.log(id);
+        exportTodo(id)
+            .then(() => {
+                $.ajax({
+                    success: function () {
+                        window.location = `http://localhost/api/exportCsv/${id}`;
+                        console.log('Export Successful');
+                    }
+                });
+            });
     }
     render() {
-        //console.log(this.state.filteredTodo)
         return (
             <>
+                <AddForms/>
                 <div className="topnav">
                     <a id="openTodos"
                        className="openTodos"
@@ -194,13 +228,16 @@ export default class FilterTodo extends React.Component {
                                                 </center>
                                                 }
                                                 <Link
-                                                    href="#"//to={`/recordTODO/${TODO.id}`}
+                                                    as={`/record/${TODO.id}`}
+                                                    href="/record/[id]"
                                                     id="recordTODO"
                                                     className="recordTODO"
                                                     style={{
                                                         color: 'whitesmoke',
                                                     }}>
+                                                    <a>
                                                     <i className="fa fa-eye"/>
+                                                    </a>
                                                 </Link>
                                                 {" "}
                                                 <a
@@ -215,7 +252,6 @@ export default class FilterTodo extends React.Component {
                                             </center>
                                         </th>
                                     </tr>
-
                                 );})}
                             </tbody>)}
                         </table>

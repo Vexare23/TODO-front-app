@@ -17,11 +17,10 @@ export default function Header() {
                         >TODO app
                         </a>
                     </Link>
-                    <NavbarComponent
-                        user={user.user}
-                    />
                 </div>
-
+                <NavbarComponent
+                    user={user.user}
+                />
             </nav>
         </header>
     )

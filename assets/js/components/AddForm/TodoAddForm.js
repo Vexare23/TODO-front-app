@@ -3,23 +3,20 @@ import TodoAddFormChild from "./TodoAddFormChild";
 import {createTodo} from "../../api/TODO_api";
 import {Button, Modal} from "react-bootstrap";
 import PropTypes from "prop-types";
-import TrueModal from "../Modal";
 
 export default function AddForm(props) {
-    const [showAddModal, setShowAddModal] = useState(false)
+    // const [showAddModal, setShowAddModal] = useState(false)
     const   {
         showAddForm,
         user,
         usersLog,
         onCloseAddForm,
-        //getTodos,
     } = props;
     const addTodoForm = function (formData) {
         createTodo(formData)
             .then(data => {
                 console.log(data);
                 onCloseAddForm()
-                //getTodos('open')
             })
     }
     const handleClose = function () {

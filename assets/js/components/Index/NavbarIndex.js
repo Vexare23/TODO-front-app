@@ -1,16 +1,12 @@
 import Link from 'next/link'
 import React from "react";
-import PropTypes from "prop-types";
+import {useUser} from "@auth0/nextjs-auth0";
 
 
 export default function NavbarComponent(props) {
-    const {
-        user,
-    } = props;
-    if(!user[0]) {
-        return null;
-    }
-    if(user[0].email) {
+    const { user, isLoading } = useUser();
+    console.log(user)
+    if(user) {
         return (
             <div className="nav_buttons">
                 <div>
@@ -23,17 +19,16 @@ export default function NavbarComponent(props) {
                     >Logged in as {user[0].email}
                     </a>
                     {" "}
-                    <Link href="/logout"
-                          id="button-Logout"
-                          className="btn btn-primary">
-                        <a
-
+                    <Link href="api/auth/logout"
+                          id="button-LogouT">
+                        <button
+                            className="btn btn-primary"
                             style={{
                                 color: 'whitesmoke',
                              fontSize: 15,
                              }}
                         >Log Out
-                        </a>
+                        </button>
                     </Link>
                 </div>
             </div>
@@ -51,28 +46,29 @@ export default function NavbarComponent(props) {
                     >Not logged in
                     </a>
                     {" "}
-                    <Link href="/login"
+                    <Link href="api/auth/login"
                           id="button-Login"
-                          className="btn btn-primary">
-                        <a
+                          >
+                        <button
+                            className="btn btn-primary"
                             style={{
                                 color: 'whitesmoke',
                                 fontSize: 15,
                             }}
                         >Log In
-                        </a>
+                        </button>
                     </Link>
                     {" "}
                     <Link href="/register"
-                          id="button-Signup"
-                          className={"btn btn-dark"}>
-                        <a
+                          id="button-Signup">
+                        <button
+                            className={"btn btn-dark"}
                             style={{
                                 color: 'whitesmoke',
                                 fontSize: 15,
                             }}
                         >Sign up
-                        </a>
+                        </button>
                     </Link>
                 </div>
             </div>
@@ -80,5 +76,4 @@ export default function NavbarComponent(props) {
     }
 }
 NavbarComponent.propTypes = {
-    user: PropTypes.array.isRequired,
 }

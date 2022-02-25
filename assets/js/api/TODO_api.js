@@ -6,7 +6,7 @@ function fetchJson(url, options) {
             return response.json()
         })
 }
-/*
+
 export function getIndexItems(status) {
     return fetchJson('http://localhost/api?'+new URLSearchParams({
         status: status,
@@ -15,7 +15,6 @@ export function getIndexItems(status) {
     })
         .then(data => data.items);
 }
- */
 
 export function getTodos() {
     return fetchJson('http://localhost/api/showTODOs')

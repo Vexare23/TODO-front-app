@@ -3,7 +3,7 @@ import AddForm from "./AddForm/TodoAddForm";
 import {getUsers} from "../api/TODO_api";
 
 
-export default class Forms extends Component {
+export default class AddForms extends Component {
     constructor(props) {
         super(props);
 
@@ -20,15 +20,7 @@ export default class Forms extends Component {
 
     }
     componentDidMount() {
-        /*getUsers()
-            .then((data) => {
-                this.setState({
-                    usersLog: data
-                });
-                //console.log(this.state.usersLog)
-            })
 
-         */
     }
     addTodoForm() {
         /*
@@ -46,7 +38,7 @@ export default class Forms extends Component {
                         usersLog: data,
                         showAddForm: true,
                     })
-                    console.log(this.state.showAddForm)
+                    //console.log(this.state.showAddForm)
                 });
         //});
     }
@@ -61,7 +53,7 @@ export default class Forms extends Component {
         });
     }
     render() {
-        console.log(this.state.showAddForm)
+        //console.log(this.state.showAddForm)
         return (
             <>
                 <a id="createTodo"
@@ -75,7 +67,6 @@ export default class Forms extends Component {
                          user={this.state.user}
                          usersLog={this.state.usersLog}
                          onCloseAddForm={this.handleCloseAddForm}
-                    // getTodos={this.getTodos}
                 />
             </>
         )
