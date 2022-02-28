@@ -317,3 +317,13 @@ header{
 .reset div {
   margin-top: 7px;
 }
+.customTitle {
+  font: 15px Helvetica, Arial, sans-serif;
+  background: #0b40ef;
+  padding: 100px;
+  text-align: center;
+  transition: 100ms ease-in background;
+}
+.customTitle:hover {
+  background: #ef0b0b;
+}
